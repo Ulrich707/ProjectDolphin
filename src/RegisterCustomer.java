@@ -2,11 +2,13 @@ class RegisterCustomer {
     private String customerName;
     private String age;
     private String activity;
+    private int membershipFee;
 
-    public RegisterCustomer(String customerName, String age, String activity) {
+    public RegisterCustomer(String customerName, String age, String activity, int membershipFee) {
         this.customerName = customerName;
         this.age = age;
         this.activity = activity;
+        this.membershipFee = membershipFee;
     }
 
     public String getCustomerName() {
@@ -19,5 +21,9 @@ class RegisterCustomer {
 
     public String getActivity() {
         return activity;
+    }
+
+    public int getMembershipFee() {
+        return membershipFee;
     }
 }

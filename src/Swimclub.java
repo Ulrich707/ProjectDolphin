@@ -19,7 +19,8 @@ class Swimclub {
         scanner.nextLine();
         if (activityChoice >= 1 && activityChoice <= availableActivities.size()) {
             String chosenActivity = availableActivities.get(activityChoice - 1);
-            RegisterCustomer newRegisterCustomer = new RegisterCustomer(customerName, age, chosenActivity);
+            int membershipFee = calculateMembershipFee(age);
+            RegisterCustomer newRegisterCustomer = new RegisterCustomer(customerName, age, chosenActivity, membershipFee);
             customersList.add(newRegisterCustomer);
             System.out.println("Customer added successfully!");
         } else {
@@ -35,9 +36,27 @@ class Swimclub {
             for (RegisterCustomer registerCustomer : customersList) {
                 System.out.println("Name: " + registerCustomer.getCustomerName() +
                         ", Age: " + registerCustomer.getAge() +
-                        ", Activity: " + registerCustomer.getActivity());
-
+                        ", Activity: " + registerCustomer.getActivity() +
+                        ", Membership Fee: " + registerCustomer.getMembershipFee());
             }
+        }
+    }
+
+    public void checkMembershipFee(Scanner scanner) {
+        System.out.print("Enter customer's age: ");
+        String age = scanner.nextLine();
+        int membershipFee = calculateMembershipFee(age);
+        System.out.println("Membership Fee for age " + age + ": " + membershipFee);
+    }
+
+    private int calculateMembershipFee(String age) {
+        int ageValue = Integer.parseInt(age);
+        if (ageValue < 18) {
+            return 1000;
+        } else if (ageValue >= 18 && ageValue <= 59) {
+            return 1600;
+        } else {
+            return 1200;
         }
     }
 

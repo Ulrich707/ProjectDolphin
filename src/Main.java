@@ -11,7 +11,8 @@ public class Main {
             System.out.println("---------------------------------");
             System.out.println("1. Add Customer");
             System.out.println("2. View list of customers");
-            System.out.println("3. Exit");
+            System.out.println("3. Check Membership Fee");
+            System.out.println("4. Exit");
             System.out.println("---------------------------------");
             System.out.println("Please, enter your choice.");
 
@@ -26,6 +27,9 @@ public class Main {
                     swimclub.viewListOfCustomers();
                     break;
                 case 3:
+                    swimclub.checkMembershipFee(scanner);
+                    break;
+                case 4:
                     isRunning = false;
                     System.out.println("Exiting the program. Have a great day!");
                     break;
