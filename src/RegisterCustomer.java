@@ -22,7 +22,6 @@ class RegisterCustomer {
     public String getActivity() {
         return activity;
     }
-
     public int getMembershipFee() {
         return membershipFee;
     }
