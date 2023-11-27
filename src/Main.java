@@ -1,10 +1,8 @@
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         Swimclub swimclub = new Swimclub();
-        swimclub.loadAppointmentsFromFile("CustomerList.txt");
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
@@ -14,7 +12,8 @@ public class Main {
             System.out.println("1. Add Customer");
             System.out.println("2. View list of customers");
             System.out.println("3. Check Membership Fee");
-            System.out.println("4. Exit");
+            System.out.println("4. Mark Entry as Paid");
+            System.out.println("5. Exit");
             System.out.println("---------------------------------");
             System.out.println("Please, enter your choice.");
 
@@ -24,7 +23,6 @@ public class Main {
             switch (choice) {
                 case 1:
                     swimclub.addCustomer(scanner);
-                    swimclub.saveAppointmentsToFile("CustomerList.txt");
                     break;
                 case 2:
                     swimclub.viewListOfCustomers();
@@ -33,6 +31,9 @@ public class Main {
                     swimclub.checkMembershipFee(scanner);
                     break;
                 case 4:
+                    swimclub.markEntryAsPaid(scanner);
+                    break;
+                case 5:
                     isRunning = false;
                     System.out.println("Exiting the program. Have a great day!");
                     break;

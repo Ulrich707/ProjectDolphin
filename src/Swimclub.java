@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 class Swimclub {
     private ArrayList<RegisterCustomer> customersList = new ArrayList<>();
+    private int orderCounter = 1;
 
     public void addCustomer(Scanner scanner) {
         System.out.print("Enter customer name: ");
@@ -24,9 +25,10 @@ class Swimclub {
         if (activityChoice >= 1 && activityChoice <= availableActivities.size()) {
             String chosenActivity = availableActivities.get(activityChoice - 1);
             int membershipFee = calculateMembershipFee(age);
-            RegisterCustomer newRegisterCustomer = new RegisterCustomer(customerName, age, chosenActivity, membershipFee);
+            RegisterCustomer newRegisterCustomer = new RegisterCustomer(orderCounter, customerName, age, chosenActivity, membershipFee, false);
             customersList.add(newRegisterCustomer);
-            System.out.println("Customer added successfully!");
+            System.out.println("Customer added successfully! Order Number: " + orderCounter);
+            orderCounter++;
         } else {
             System.out.println("Invalid activity choice.");
         }
@@ -38,10 +40,12 @@ class Swimclub {
         } else {
             System.out.println("List of Customers:");
             for (RegisterCustomer registerCustomer : customersList) {
-                System.out.println("Name: " + registerCustomer.getCustomerName() +
+                System.out.println("Order Number: " + registerCustomer.getOrderNumber() +
+                        ", Name: " + registerCustomer.getCustomerName() +
                         ", Age: " + registerCustomer.getAge() +
                         ", Activity: " + registerCustomer.getActivity() +
-                        ", Membership Fee: " + registerCustomer.getMembershipFee());
+                        ", Membership Fee: " + registerCustomer.getMembershipFee() +
+                        ", Paid: " + (registerCustomer.isPaid() ? "Yes" : "No"));
             }
         }
     }
@@ -51,6 +55,22 @@ class Swimclub {
         String age = scanner.nextLine();
         int membershipFee = calculateMembershipFee(age);
         System.out.println("Membership Fee for age " + age + ": " + membershipFee);
+    }
+
+    public void markEntryAsPaid(Scanner scanner) {
+        System.out.print("Enter the order number of the entry to mark as paid: ");
+        int orderNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        for (RegisterCustomer customer : customersList) {
+            if (customer.getOrderNumber() == orderNumber) {
+                customer.markAsPaid();
+                System.out.println("Entry marked as paid for customer: " + customer.getCustomerName());
+                return;
+            }
+        }
+
+        System.out.println("Invalid order number. Please try again.");
     }
 
     private int calculateMembershipFee(String age) {
@@ -71,34 +91,4 @@ class Swimclub {
         availableActivity.add("Running");
         return availableActivity;
     }
-    public void saveAppointmentsToFile(String filename) {
-        try (PrintWriter writer = new PrintWriter(filename)) {
-            for (RegisterCustomer registerCustomer : customersList) {
-                String line = registerCustomer.getAge() + " - " + registerCustomer.getActivity() + " - " + registerCustomer.getCustomerName();
-                writer.println(line);
-            }
-            System.out.println("Customer list saved to file: " + filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void loadAppointmentsFromFile(String filename) {
-        try (Scanner fileScanner = new Scanner(new File(filename))) {
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                String[] parts = line.split(" - ");
-                if (parts.length == 3) {
-                    String age = parts[0];
-                    String activity = parts[1];
-                    String customerName = parts[2];
-                    int membershipFee = calculateMembershipFee(age);
-                    RegisterCustomer customer = new RegisterCustomer(customerName, age, activity, membershipFee);
-                    customersList.add(customer);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + filename);
-        }
-    }
-
 }
