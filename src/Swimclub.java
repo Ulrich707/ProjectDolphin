@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -66,5 +70,34 @@ class Swimclub {
         availableActivity.add("Diving");
         availableActivity.add("Running");
         return availableActivity;
+    }
+    public void saveAppointmentsToFile(String filename) {
+        try (PrintWriter writer = new PrintWriter(filename)) {
+            for (RegisterCustomer registerCustomer : customersList) {
+                String line = registerCustomer.getAge() + " - " + registerCustomer.getActivity() + " - " + registerCustomer.getCustomerName();
+                writer.println(line);
+            }
+            System.out.println("Customer list saved to file: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadAppointmentsFromFile(String filename) {
+        try (Scanner fileScanner = new Scanner(new File(filename))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(" - ");
+                if (parts.length == 3) {
+                    String age = parts[0];
+                    String activity = parts[1];
+                    String customerName = parts[2];
+                    int membershipFee = calculateMembershipFee(age);
+                    RegisterCustomer customer = new RegisterCustomer(customerName, age, activity, membershipFee);
+                    customersList.add(customer);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+        }
     }
 }

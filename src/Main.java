@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Swimclub swimclub = new Swimclub();
+        swimclub.loadAppointmentsFromFile("CustomerList.txt");
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
@@ -22,6 +23,7 @@ public class Main {
             switch (choice) {
                 case 1:
                     swimclub.addCustomer(scanner);
+                    swimclub.saveAppointmentsToFile("CustomerList.txt");
                     break;
                 case 2:
                     swimclub.viewListOfCustomers();
