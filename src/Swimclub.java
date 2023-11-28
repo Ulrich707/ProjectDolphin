@@ -35,6 +35,7 @@ class Swimclub {
             orderCounter++;
         } else {
             System.out.println("Invalid activity choice.");
+
         }
     }
 
