@@ -9,6 +9,10 @@ class Swimclub {
     private ArrayList<RegisterCustomer> customersList = new ArrayList<>();
     private int orderCounter = 1;
 
+    public ArrayList<RegisterCustomer> getCustomersList() {
+        return customersList;
+    }
+
     public void addCustomer(Scanner scanner) {
         System.out.print("Enter customer name: ");
         String customerName = scanner.nextLine();
@@ -84,11 +88,52 @@ class Swimclub {
         }
     }
 
-    private ArrayList<String> getAvailableActivity() {
+    public ArrayList<String> getAvailableActivity() {
         ArrayList<String> availableActivity = new ArrayList<>();
         availableActivity.add("Swimming");
         availableActivity.add("Diving");
         availableActivity.add("Running");
         return availableActivity;
+    }
+
+    public void saveAppointmentsToFile(String filename) {
+        try (PrintWriter writer = new PrintWriter(filename)) {
+            for (RegisterCustomer registerCustomer : customersList) {
+                String line = registerCustomer.getAge() + " - " + registerCustomer.getActivity() + " - " + registerCustomer.getCustomerName();
+                writer.println(line);
+            }
+            System.out.println("Customer list saved to file: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadAppointmentsFromFile(String filename) {
+        try (Scanner fileScanner = new Scanner(new File(filename))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(" - ");
+                if (parts.length == 3) {
+                    String age = parts[0];
+                    String activity = parts[1];
+                    String customerName = parts[2];
+                    int membershipFee = calculateMembershipFee(age);
+                    RegisterCustomer customer = new RegisterCustomer(customerName, age, activity, membershipFee);
+                    customersList.add(customer);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+        }
+    }
+
+    public ArrayList<RegisterCustomer> getCustomersByActivity(String activity) {
+        ArrayList<RegisterCustomer> customersByActivity = new ArrayList<>();
+        for (RegisterCustomer customer : customersList) {
+            if (customer.getActivity().equalsIgnoreCase(activity)) {
+                customersByActivity.add(customer);
+            }
+        }
+        return customersByActivity;
     }
 }
