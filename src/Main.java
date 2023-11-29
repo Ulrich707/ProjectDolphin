@@ -17,7 +17,8 @@ public class Main {
             System.out.println("4. Enter contest results");
             System.out.println("5. Display contest results");
             System.out.println("6. Mark Entry as Paid");
-            System.out.println("7. Exit");
+            System.out.println("7. Toggle Passive Status");
+            System.out.println("8. Exit");
             System.out.println("---------------------------------");
             System.out.println("Please, enter your choice.");
 
@@ -45,6 +46,9 @@ public class Main {
                     swimclub.markEntryAsPaid(scanner);
                     break;
                 case 7:
+                    togglePassiveStatus(swimclub, scanner);
+                    break;
+                case 8:
                     isRunning = false;
                     System.out.println("Exiting the program. Have a great day!");
                     break;
@@ -54,4 +58,20 @@ public class Main {
         }
     }
 
+    private static void togglePassiveStatus(Swimclub swimclub, Scanner scanner) {
+        System.out.print("Enter the order number of the member to toggle passive status: ");
+        int ticketNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        for (RegisterCustomer customer : swimclub.getCustomersList()) {
+            if (customer.getTicketNumber() == ticketNumber) {
+                PassiveMember passiveMember = new PassiveMember(customer);
+                passiveMember.togglePassiveStatus();
+                System.out.println("Passive status toggled for member: " + customer.getCustomerName());
+                return;
+            }
+        }
+
+        System.out.println("Member not found. Please try again.");
+    }
 }

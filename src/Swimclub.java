@@ -26,18 +26,26 @@ class Swimclub {
         }
         int activityChoice = scanner.nextInt();
         scanner.nextLine();
+
         if (activityChoice >= 1 && activityChoice <= availableActivities.size()) {
             String chosenActivity = availableActivities.get(activityChoice - 1);
             int membershipFee = calculateMembershipFee(age);
-            RegisterCustomer newRegisterCustomer = new RegisterCustomer(orderCounter, customerName, age, chosenActivity, membershipFee, false);
+
+
+            if (orderCounter <= 0) {
+                System.out.println("Invalid ticket number. Please try again.");
+                return;
+            }
+
+            RegisterCustomer newRegisterCustomer = new RegisterCustomer(orderCounter, customerName, age, chosenActivity, membershipFee, false, false);
             customersList.add(newRegisterCustomer);
-            System.out.println("Customer added successfully! Order Number: " + orderCounter);
+            System.out.println("Customer added successfully! Ticket Number: " + orderCounter);
             orderCounter++;
         } else {
             System.out.println("Invalid activity choice.");
-
         }
     }
+
 
     public void viewListOfCustomers() {
         if (customersList.isEmpty()) {
@@ -45,15 +53,17 @@ class Swimclub {
         } else {
             System.out.println("List of Customers:");
             for (RegisterCustomer registerCustomer : customersList) {
-                System.out.println("Order Number: " + registerCustomer.getOrderNumber() +
+                System.out.println("Ticket Number: " + registerCustomer.getTicketNumber() +
                         ", Name: " + registerCustomer.getCustomerName() +
                         ", Age: " + registerCustomer.getAge() +
                         ", Activity: " + registerCustomer.getActivity() +
                         ", Membership Fee: " + registerCustomer.getMembershipFee() +
-                        ", Paid: " + (registerCustomer.isPaid() ? "Yes" : "No"));
+                        ", Paid: " + (registerCustomer.isPaid() ? "Yes" : "No") +
+                        ", Passive: " + (registerCustomer.isPassive() ? "Yes" : "No"));
             }
         }
     }
+
 
     public void checkMembershipFee(Scanner scanner) {
         System.out.print("Enter customer's age: ");
@@ -63,19 +73,19 @@ class Swimclub {
     }
 
     public void markEntryAsPaid(Scanner scanner) {
-        System.out.print("Enter the order number of the entry to mark as paid: ");
+        System.out.print("Enter the ticket number of the entry to mark as paid: ");
         int orderNumber = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
+        scanner.nextLine();
 
         for (RegisterCustomer customer : customersList) {
-            if (customer.getOrderNumber() == orderNumber) {
+            if (customer.getTicketNumber() == orderNumber) {
                 customer.markAsPaid();
                 System.out.println("Entry marked as paid for customer: " + customer.getCustomerName());
                 return;
             }
         }
 
-        System.out.println("Invalid order number. Please try again.");
+        System.out.println("Invalid ticket number. Please try again.");
     }
 
     private int calculateMembershipFee(String age) {
@@ -119,7 +129,7 @@ class Swimclub {
                     String activity = parts[1];
                     String customerName = parts[2];
                     int membershipFee = calculateMembershipFee(age);
-                    RegisterCustomer customer = new RegisterCustomer(customerName, age, activity, membershipFee);
+                    RegisterCustomer customer = new RegisterCustomer(orderCounter, customerName, age, activity, membershipFee, false);
                     customersList.add(customer);
                 }
             }
