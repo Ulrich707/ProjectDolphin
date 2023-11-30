@@ -31,10 +31,12 @@ public class SwimContest {
         }
 
         String chosenActivity = availableActivities.get(activityChoice - 1);
-        ArrayList<RegisterCustomer> participants = swimclub.getCustomersByActivity(chosenActivity);
+
+        // Get participants excluding passive members
+        ArrayList<RegisterCustomer> participants = getActiveParticipants(chosenActivity);
 
         if (participants.isEmpty()) {
-            System.out.println("No participants found for " + chosenActivity);
+            System.out.println("No active participants found for " + chosenActivity);
             return;
         }
 
@@ -55,9 +57,7 @@ public class SwimContest {
             System.out.println("Available spots left: " + (5 - spotsFilled));
             for (int i = 0; i < participants.size(); i++) {
                 RegisterCustomer participant = participants.get(i);
-                if (!contestParticipants.contains(participant)) {
-                    System.out.println((i + 1) + ". " + participant.getCustomerName());
-                }
+                System.out.println((i + 1) + ". " + participant.getCustomerName());
             }
 
             System.out.println("Enter participant number to set swim time (time in seconds):");
@@ -91,11 +91,23 @@ public class SwimContest {
         }
     }
 
+    // Helper method to get active participants for a specific activity
+    private ArrayList<RegisterCustomer> getActiveParticipants(String activity) {
+        ArrayList<RegisterCustomer> activeParticipants = new ArrayList<>();
+        for (RegisterCustomer customer : swimclub.getCustomersByActivity(activity)) {
+            if (!customer.isPassive()) {
+                activeParticipants.add(customer);
+            }
+        }
+        return activeParticipants;
+    }
 
 
 
 
-            public void displayTop5Results(Scanner scanner) {
+
+
+    public void displayTop5Results(Scanner scanner) {
         System.out.println("Available contests:");
         for (String contestName : contests.keySet()) {
             System.out.println("- " + contestName);

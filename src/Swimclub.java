@@ -5,9 +5,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Swimclub {
+public class Swimclub {
     private ArrayList<RegisterCustomer> customersList = new ArrayList<>();
-    private int orderCounter = 1;
+    private static int orderCounter = 1;
 
     public ArrayList<RegisterCustomer> getCustomersList() {
         return customersList;
@@ -24,28 +24,33 @@ class Swimclub {
         for (int i = 0; i < availableActivities.size(); i++) {
             System.out.println((i + 1) + ". " + availableActivities.get(i));
         }
-        int activityChoice = scanner.nextInt();
-        scanner.nextLine();
+
+        int activityChoice;
+        try {
+            activityChoice = scanner.nextInt();
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Invalid input for activity choice. Please enter a number.");
+            scanner.nextLine(); // Consume the invalid input
+            return;
+        }
+        scanner.nextLine(); // Consume the newline character
 
         if (activityChoice >= 1 && activityChoice <= availableActivities.size()) {
             String chosenActivity = availableActivities.get(activityChoice - 1);
-            int membershipFee = calculateMembershipFee(age);
-
+            int membershipFee = calculateMembershipFee(age, false);  // Assuming initially not passive
 
             if (orderCounter <= 0) {
                 System.out.println("Invalid ticket number. Please try again.");
                 return;
             }
 
-            RegisterCustomer newRegisterCustomer = new RegisterCustomer(orderCounter, customerName, age, chosenActivity, membershipFee, false, false);
+            RegisterCustomer newRegisterCustomer = new RegisterCustomer(orderCounter++, customerName, age, chosenActivity, membershipFee, false, false);
             customersList.add(newRegisterCustomer);
-            System.out.println("Customer added successfully! Ticket Number: " + orderCounter);
-            orderCounter++;
+            System.out.println("Customer added successfully! Ticket Number: " + (orderCounter - 1));
         } else {
             System.out.println("Invalid activity choice.");
         }
     }
-
 
     public void viewListOfCustomers() {
         if (customersList.isEmpty()) {
@@ -64,18 +69,24 @@ class Swimclub {
         }
     }
 
-
     public void checkMembershipFee(Scanner scanner) {
         System.out.print("Enter customer's age: ");
         String age = scanner.nextLine();
-        int membershipFee = calculateMembershipFee(age);
+        int membershipFee = calculateMembershipFee(age, false);  // Assuming initially not passive
         System.out.println("Membership Fee for age " + age + ": " + membershipFee);
     }
 
     public void markEntryAsPaid(Scanner scanner) {
         System.out.print("Enter the ticket number of the entry to mark as paid: ");
-        int orderNumber = scanner.nextInt();
-        scanner.nextLine();
+        int orderNumber;
+        try {
+            orderNumber = scanner.nextInt();
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Invalid input for ticket number. Please enter a number.");
+            scanner.nextLine(); // Consume the invalid input
+            return;
+        }
+        scanner.nextLine(); // Consume the newline character
 
         for (RegisterCustomer customer : customersList) {
             if (customer.getTicketNumber() == orderNumber) {
@@ -88,9 +99,11 @@ class Swimclub {
         System.out.println("Invalid ticket number. Please try again.");
     }
 
-    private int calculateMembershipFee(String age) {
+    private int calculateMembershipFee(String age, boolean isPassive) {
         int ageValue = Integer.parseInt(age);
-        if (ageValue < 18) {
+        if (isPassive) {
+            return 500;  // Passive fee
+        } else if (ageValue < 18) {
             return 1000;
         } else if (ageValue >= 18 && ageValue <= 59) {
             return 1600;
@@ -128,11 +141,12 @@ class Swimclub {
                     String age = parts[0];
                     String activity = parts[1];
                     String customerName = parts[2];
-                    int membershipFee = calculateMembershipFee(age);
-                    RegisterCustomer customer = new RegisterCustomer(orderCounter, customerName, age, activity, membershipFee, false);
+                    int membershipFee = calculateMembershipFee(age, false);  // Assuming initially not passive
+                    RegisterCustomer customer = new RegisterCustomer(orderCounter++, customerName, age, activity, membershipFee, false, false);
                     customersList.add(customer);
                 }
             }
+            System.out.println("Customer list loaded from file: " + filename);
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);
         }
@@ -147,4 +161,71 @@ class Swimclub {
         }
         return customersByActivity;
     }
+
+    public void addPassiveMembershipFee(Scanner scanner) {
+        System.out.print("Enter the ticket number of the customer to add passive membership fee: ");
+        int orderNumber;
+        try {
+            orderNumber = scanner.nextInt();
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Invalid input for ticket number. Please enter a number.");
+            scanner.nextLine(); // Consume the invalid input
+            return;
+        }
+
+
+        for (RegisterCustomer customer : customersList) {
+            if (customer.getTicketNumber() == orderNumber) {
+                System.out.println("Customer: " + customer.getCustomerName() +
+                        ", Passive: " + (customer.isPassive() ? "Yes" : "No"));
+                return;
+            }
+        }
+
+        System.out.println("Invalid ticket number. Please try again.");
+    }
+
+    public void checkParticipationStatus(Scanner scanner) {
+        System.out.print("Enter the ticket number of the customer to check participation status: ");
+        int orderNumber;
+        try {
+            orderNumber = scanner.nextInt();
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Invalid input for ticket number. Please enter a number.");
+            scanner.nextLine(); // Consume the invalid input
+            return;
+        }
+        scanner.nextLine(); // Consume the newline character
+
+        for (RegisterCustomer customer : customersList) {
+            if (customer.getTicketNumber() == orderNumber) {
+                System.out.println("Customer: " + customer.getCustomerName() +
+                        ", Participating: " + (customer.getContestTime() > 0 ? "Yes" : "No"));
+                return;
+            }
+        }
+
+        System.out.println("Invalid ticket number. Please try again.");
+    }
+
+    public void checkPassiveMembers() {
+        System.out.println("List of Passive Members:");
+        boolean foundPassiveMember = false;
+        for (RegisterCustomer customer : customersList) {
+            if (customer.isPassive()) {
+                System.out.println("Ticket Number: " + customer.getTicketNumber() +
+                        ", Name: " + customer.getCustomerName() +
+                        ", Age: " + customer.getAge() +
+                        ", Activity: " + customer.getActivity() +
+                        ", Membership Fee: " + customer.getMembershipFee());
+                foundPassiveMember = true;
+            }
+        }
+
+        if (!foundPassiveMember) {
+            System.out.println("No passive members found.");
+        }
+    }
 }
+
+

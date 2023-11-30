@@ -1,4 +1,6 @@
-class RegisterCustomer {
+public class RegisterCustomer {
+    private static int lastTicketNumber = 0; // Static variable to track the last assigned ticket number
+
     private int ticketNumber;
     private String customerName;
     private String age;
@@ -8,27 +10,22 @@ class RegisterCustomer {
     private boolean isPaid;
     private boolean isPassive;
 
-    // Constructor without isPassive parameter
-    public RegisterCustomer(int orderCounter, String customerName, String age, String activity, int membershipFee, boolean b) {
+    public RegisterCustomer(int i, String customerName, String age, String activity, int membershipFee, boolean isPassive, boolean b) {
+        this.ticketNumber = ++lastTicketNumber; // Increment and assign a unique ticket number
         this.customerName = customerName;
         this.age = age;
         this.activity = activity;
         this.membershipFee = membershipFee;
-        this.contestTime = 0;
         this.isPaid = false;
-        this.isPassive = false; // Set default to active
-    }
-
-    // Constructor with isPassive parameter
-    public RegisterCustomer(int orderNumber, String customerName, String age, String activity, int membershipFee, boolean isPaid, boolean isPassive) {
-        this.ticketNumber = orderNumber;
-        this.customerName = customerName;
-        this.age = age;
-        this.activity = activity;
-        this.membershipFee = membershipFee;
-        this.isPaid = isPaid;
         this.isPassive = isPassive;
         this.contestTime = 0;
+
+    }
+
+
+    // Getter for lastTicketNumber
+    public static int getLastTicketNumber() {
+        return lastTicketNumber;
     }
 
     // Getter and setter for isPassive
