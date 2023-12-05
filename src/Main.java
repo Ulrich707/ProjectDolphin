@@ -51,7 +51,7 @@ public class Main {
                     break;
                 case 8:
                     isRunning = false;
-                    System.out.println(ConsoleColors.RED_BOLD + "Exiting the program, " + ConsoleColors.GREEN_BOLD + "Have a great day!" + ConsoleColors.RESET);
+                    System.out.println(ConsoleColors.RED_BOLD + "Exiting the program! " + ConsoleColors.GREEN_BOLD + "Have a great day!" + ConsoleColors.RESET);
                     break;
                 default:
                     System.out.println(ConsoleColors.RED_BOLD + "Invalid choice. Please try again." + ConsoleColors.RESET);
