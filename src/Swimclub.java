@@ -29,7 +29,7 @@ public class Swimclub {
         try {
             activityChoice = scanner.nextInt();
         } catch (java.util.InputMismatchException e) {
-            System.out.println("Invalid input for activity choice. Please enter a number.");
+            System.out.println(ConsoleColors.RED_UNDERLINED + "Invalid input for activity choice. Please enter a number." + ConsoleColors.RESET);
             scanner.nextLine(); // Consume the invalid input
             return;
         }
@@ -40,15 +40,15 @@ public class Swimclub {
             int membershipFee = calculateMembershipFee(age, false);  // Assuming initially not passive
 
             if (orderCounter <= 0) {
-                System.out.println("Invalid ticket number. Please try again.");
+                System.out.println(ConsoleColors.RED_UNDERLINED + "Invalid ticket number. Please try again." + ConsoleColors.RESET);
                 return;
             }
 
             RegisterCustomer newRegisterCustomer = new RegisterCustomer(orderCounter++, customerName, age, chosenActivity, membershipFee, false, false);
             customersList.add(newRegisterCustomer);
-            System.out.println("Customer added successfully! Ticket Number: " + (orderCounter - 1));
+            System.out.println(ConsoleColors.GREEN_UNDERLINED + "Customer added successfully! Ticket Number: " + (orderCounter - 1) + ConsoleColors.RESET);
         } else {
-            System.out.println("Invalid activity choice.");
+            System.out.println(ConsoleColors.RED_UNDERLINED + "Invalid activity choice." + ConsoleColors.RESET);
         }
     }
 
@@ -58,13 +58,13 @@ public class Swimclub {
         } else {
             System.out.println("List of Customers:");
             for (RegisterCustomer registerCustomer : customersList) {
-                System.out.println("Ticket Number: " + registerCustomer.getTicketNumber() +
+                System.out.println(ConsoleColors.PURPLE + "Ticket Number: " + registerCustomer.getTicketNumber() +
                         ", Name: " + registerCustomer.getCustomerName() +
                         ", Age: " + registerCustomer.getAge() +
                         ", Activity: " + registerCustomer.getActivity() +
                         ", Membership Fee: " + registerCustomer.getMembershipFee() +
                         ", Paid: " + (registerCustomer.isPaid() ? "Yes" : "No") +
-                        ", Passive: " + (registerCustomer.isPassive() ? "Yes" : "No"));
+                        ", Passive: " + (registerCustomer.isPassive() ? "Yes" : "No") + ConsoleColors.RESET);
             }
         }
     }
@@ -77,12 +77,12 @@ public class Swimclub {
     }
 
     public void markEntryAsPaid(Scanner scanner) {
-        System.out.print("Enter the ticket number of the entry to mark as paid: ");
+        System.out.print(ConsoleColors.PURPLE + "Enter the ticket number of the entry to mark as paid: " + ConsoleColors.RESET);
         int orderNumber;
         try {
             orderNumber = scanner.nextInt();
         } catch (java.util.InputMismatchException e) {
-            System.out.println("Invalid input for ticket number. Please enter a number.");
+            System.out.println(ConsoleColors.RED_UNDERLINED + "Invalid input for ticket number. Please enter a number." + ConsoleColors.RESET);
             scanner.nextLine(); // Consume the invalid input
             return;
         }
@@ -91,7 +91,7 @@ public class Swimclub {
         for (RegisterCustomer customer : customersList) {
             if (customer.getTicketNumber() == orderNumber) {
                 customer.markAsPaid();
-                System.out.println("Entry marked as paid for customer: " + customer.getCustomerName());
+                System.out.println(ConsoleColors.GREEN_UNDERLINED + "Entry marked as paid for customer: " + customer.getCustomerName() + ConsoleColors.RESET);
                 return;
             }
         }
@@ -213,17 +213,17 @@ public class Swimclub {
         boolean foundPassiveMember = false;
         for (RegisterCustomer customer : customersList) {
             if (customer.isPassive()) {
-                System.out.println("Ticket Number: " + customer.getTicketNumber() +
+                System.out.println(ConsoleColors.PURPLE + "Ticket Number: " + customer.getTicketNumber() +
                         ", Name: " + customer.getCustomerName() +
                         ", Age: " + customer.getAge() +
                         ", Activity: " + customer.getActivity() +
-                        ", Membership Fee: " + customer.getMembershipFee());
+                        ", Membership Fee: " + customer.getMembershipFee() + ConsoleColors.RESET);
                 foundPassiveMember = true;
             }
         }
 
         if (!foundPassiveMember) {
-            System.out.println("No passive members found.");
+            System.out.println(ConsoleColors.RED + "No passive members found." + ConsoleColors.RESET);
         }
     }
 }

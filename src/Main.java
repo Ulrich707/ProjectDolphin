@@ -9,18 +9,18 @@ public class Main {
         boolean isRunning = true;
 
         while (isRunning) {
-            System.out.println("Welcome to our swim club!");
-            System.out.println("---------------------------------");
-            System.out.println("1. Add Customer");
-            System.out.println("2. View list of customers");
-            System.out.println("3. Check Membership Fee");
-            System.out.println("4. Enter contest results");
-            System.out.println("5. Display contest results");
-            System.out.println("6. Mark Entry as Paid");
-            System.out.println("7. Toggle Passive Status");
-            System.out.println("8. Exit");
-            System.out.println("---------------------------------");
-            System.out.println("Please, enter your choice.");
+            System.out.println(ConsoleColors.BLUE_UNDERLINED + "Welcome to the Swimclub App!" + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.BLACK_BOLD + "---------------------------------" + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.CYAN_BACKGROUND_BRIGHT + "1. Add Customer           " + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.CYAN_BACKGROUND_BRIGHT + "2. View list of customers " + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.GREEN_BACKGROUND_BRIGHT + "3. Display contest results" + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.GREEN_BACKGROUND_BRIGHT + "4. Enter contest results  " + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.YELLOW_BACKGROUND_BRIGHT + "5. Check Membership Fee   " + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.YELLOW_BACKGROUND_BRIGHT + "6. Mark Entry as Paid     " + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.YELLOW_BACKGROUND_BRIGHT + "7. Toggle Passive Status  " + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.RED_BACKGROUND_BRIGHT + "8. Exit                   " + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.BLACK_BOLD + "---------------------------------" + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.BLACK_UNDERLINED + "Please, enter your choice:" + ConsoleColors.RESET);
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -34,14 +34,15 @@ public class Main {
                     swimclub.viewListOfCustomers();
                     break;
                 case 3:
-                    swimclub.checkMembershipFee(scanner);
+                    swimContest.displayTop5Results(scanner);
                     break;
                 case 4:
                     swimContest.enterSwimResults(scanner);
                     break;
                 case 5:
-                    swimContest.displayTop5Results(scanner);
+                    swimclub.checkMembershipFee(scanner);
                     break;
+
                 case 6:
                     swimclub.markEntryAsPaid(scanner);
                     break;
@@ -50,10 +51,10 @@ public class Main {
                     break;
                 case 8:
                     isRunning = false;
-                    System.out.println("Exiting the program. Have a great day!");
+                    System.out.println(ConsoleColors.RED_BOLD + "Exiting the program, " + ConsoleColors.GREEN_BOLD + "Have a great day!" + ConsoleColors.RESET);
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println(ConsoleColors.RED_BOLD + "Invalid choice. Please try again." + ConsoleColors.RESET);
             }
         }
     }
@@ -72,6 +73,6 @@ public class Main {
             }
         }
 
-        System.out.println("Member not found. Please try again.");
+        System.out.println(ConsoleColors.RED_UNDERLINED + "Member not found. Please try again." + ConsoleColors.RESET);
     }
 }
