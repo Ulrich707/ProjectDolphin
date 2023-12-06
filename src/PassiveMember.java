@@ -8,12 +8,4 @@ public class PassiveMember {
     public void togglePassiveStatus() {
         member.setPassive(!member.isPassive());
     }
-
-    public boolean isPassive() {
-        return member.isPassive();
-    }
-
-    public RegisterCustomer getMember() {
-        return member;
-    }
 }

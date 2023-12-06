@@ -16,23 +16,28 @@ public class SwimContest {
     }
 
     public void enterSwimResults(Scanner scanner) {
-        ArrayList<String> availableActivities = swimclub.getAvailableActivity();
-        System.out.println("Choose an activity for the contest:");
-        for (int i = 0; i < availableActivities.size(); i++) {
-            System.out.println((i + 1) + ". " + availableActivities.get(i));
-        }
+        System.out.println("Choose a swimming activity for the contest:");
+        System.out.println("1. 100m");
+        System.out.println("2. Crawl");
+        System.out.println("3. Butterfly");
 
         int activityChoice = scanner.nextInt();
         scanner.nextLine();
 
-        if (activityChoice < 1 || activityChoice > availableActivities.size()) {
+        String chosenActivity;
+
+        if (activityChoice == 1) {
+            chosenActivity = "100m";
+        } else if (activityChoice == 2) {
+            chosenActivity = "crawl";
+        } else if (activityChoice == 3) {
+            chosenActivity = "butterfly";
+        } else {
             System.out.println("Invalid activity choice.");
             return;
         }
 
-        String chosenActivity = availableActivities.get(activityChoice - 1);
 
-        // Get participants excluding passive members
         ArrayList<RegisterCustomer> participants = getActiveParticipants(chosenActivity);
 
         if (participants.isEmpty()) {
@@ -40,58 +45,19 @@ public class SwimContest {
             return;
         }
 
-        System.out.print("Enter the name for this contest: ");
-        String contestName = scanner.nextLine();
-
-        if (contests.containsKey(contestName)) {
-            System.out.println("Contest name already exists. Please use a different name.");
-            return;
+        // Determine the coach based on the chosen activity
+        String coach;
+        if (chosenActivity.equals("100m")) {
+            coach = "Henning";
+        } else if (chosenActivity.equals("crawl")) {
+            coach = "Morten";
+        } else { // Assuming the only option left is "butterfly"
+            coach = "Søren";
         }
 
-        System.out.println("Select up to 5 participants for " + chosenActivity + " to enter swim results:");
-
-        ArrayList<RegisterCustomer> contestParticipants = new ArrayList<>();
-        int spotsFilled = 0;
-
-        while (spotsFilled < 5) {
-            System.out.println("Available spots left: " + (5 - spotsFilled));
-            for (int i = 0; i < participants.size(); i++) {
-                RegisterCustomer participant = participants.get(i);
-                System.out.println((i + 1) + ". " + participant.getCustomerName());
-            }
-
-            System.out.println("Enter participant number to set swim time (time in seconds):");
-            int participantChoice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (participantChoice < 1 || participantChoice > participants.size()) {
-                System.out.println("Invalid participant choice.");
-                continue;
-            }
-
-            RegisterCustomer participant = participants.get(participantChoice - 1);
-            if (contestParticipants.contains(participant)) {
-                System.out.println("Participant already selected.");
-                continue;
-            }
-
-            System.out.print("Enter swim time for " + participant.getCustomerName() + ": ");
-            double time = scanner.nextDouble();
-            scanner.nextLine(); // Consume newline character
-            participant.setContestTime(time);
-            contestParticipants.add(participant);
-            spotsFilled++;
-            System.out.println("Swim time for " + participant.getCustomerName() + " entered successfully!");
-
-            if (spotsFilled == 5) {
-                contests.put(contestName, contestParticipants);
-                System.out.println("Contest '" + contestName + "' with " + chosenActivity + " participants created.");
-                break;
-            }
-        }
+        System.out.println("Coach for " + chosenActivity + ": " + coach);
     }
 
-    // Helper method to get active participants for a specific activity
     private ArrayList<RegisterCustomer> getActiveParticipants(String activity) {
         ArrayList<RegisterCustomer> activeParticipants = new ArrayList<>();
         for (RegisterCustomer customer : swimclub.getCustomersByActivity(activity)) {
@@ -101,10 +67,6 @@ public class SwimContest {
         }
         return activeParticipants;
     }
-
-
-
-
 
 
     public void displayTop5Results(Scanner scanner) {
