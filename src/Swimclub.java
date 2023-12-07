@@ -115,7 +115,7 @@ public class Swimclub {
         ArrayList<String> availableActivity = new ArrayList<>();
         availableActivity.add("Swimming");
         availableActivity.add("Diving");
-        availableActivity.add("Running");
+        availableActivity.add("Sauna");
         return availableActivity;
     }
 
